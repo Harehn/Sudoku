@@ -5,10 +5,9 @@
 	<title>Sudoku</title>
 	
 	<script type="text/javascript" src="cell.js"></script>
-	<!--
-	<script type="text/javascript" src="CentreBox.js"></script>
-	<script type="text/javascript" src="box.js"></script>
-	-->
+	
+	<script type="text/javascript" src="groups.js"></script>
+	<script type="text/javascript" src="list.js"></script>
 </head>
 <body>
 <p>Instructions</p>
@@ -37,6 +36,7 @@ function setup(){
 	list=makeRandomList();
 	groups=write(list,cells);
 }
+
 function createCells(){
 	let newCells=make2DArray(9,9);
 	for(let i=0;i<9;i++){
@@ -46,24 +46,6 @@ function createCells(){
 	}
 	return newCells;
 }
-function makeGroup(x1,y1,x2,y2,allCells){
-	let cells=new Array(9);
-	let k=0;
-	for(let i=x1;i<x2+1;i++){
-		for(let j=y1;j<y2+1;j++){
-			cells[k]= allCells[i] [j];
-			k++;
-		}
-	}
-	return cells;
-}
-
-function writeToGroup(list,group){
-	for(let i=0;i<list.length;i++){
-		group[i].write(list[i]);
-	}
-}
-
 function smaller(a,b){
 	return a<b?a:b;
 }
@@ -75,21 +57,6 @@ function make2DArray(row,col){
 	}
 	return arr;
 }
-
-function randomise(number){//returns randomly number from 0 to (number-1) inclusive
-	return Math.floor((Math.random() * number));
-}
-function shuffle(arr){
-	let randomArr=copyArr(arr);
-	let length=arr.length;
-	for(let i=0;i<length;i++){
-		target=randomise(length);
-		temp=randomArr[i];
-		randomArr[i]=randomArr[target];
-		randomArr[target]=temp;
-	}
-	return randomArr;
-}
 function copyArr(Arr){
 	let copy=new Array(Arr.length);
 	for(let i=0;i<Arr.length;i++){
@@ -97,28 +64,17 @@ function copyArr(Arr){
 	}
 	return copy;
 }
+
 function write(list,cells){
 	let points=[0,0,2,2,  3,0,5,2,  6,0,8,2,  0,3,2,5,  3,3,5,5,  6,3,8,5,  0,6,2,8,  3,6,5,8,  6,6,8,8];
 	let k=0;
 	let groups=new Array(9);
 	for(let i=0;i<36;i+=4){
 		groups[k]=makeGroup(points[i],points[i+1],points[i+2],points[i+3],cells);
-		console.log(k+" "+i+" "+points[i]+" "+points[i+1]+" "+points[i+2]+" "+points[i+3])
 		writeToGroup(list[k],groups[k]);
 		k++;
 	}
 	return groups;
-}
-function makeRandomList(){
-	let list=new Array(9);
-	let numbers=new Array(9);
-	for(let i=0;i<9;i++){
-		numbers[i]=i+1;
-	}
-	for(let i=0;i<9;i++){
-		list[i]=shuffle(numbers);
-	}
-	return list;
 }
 function background(r,g,b){
 	context.fillStyle= "rgb(" +r+ "," +g+ "," +b+")";
@@ -134,7 +90,6 @@ function setBorders(){
 	drawLine(3*unitLength,0,3*unitLength,9*unitLength,);
 	drawLine(6*unitLength,0,6*unitLength,9*unitLength,);
 }
-
 function drawLine(x1,y1,x2,y2){
 	context.lineWidth=3;
 	context.beginPath()
