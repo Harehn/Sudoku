@@ -17,10 +17,11 @@
 <script>
 let canvas;
 let context;
+let list;
 canvas=document.getElementById("platformCanvas");
 context=canvas.getContext("2d");
-let cells=new Array(9,9);
-let unitLength=Math.floor(smaller(canvas.width,canvas.length)/9)
+let cells=make2DArray(9,9);
+let unitLength=Math.floor(smaller(canvas.width,canvas.height)/9);
 
 window.onload=function() {
 	//canvas=document.getElementById("platformCanvas");
@@ -32,28 +33,95 @@ window.onload=function() {
 function setup(){
 	background(255,255,255);
 	setBorders();
-	createBorders();
+	createCells();
+	list=makeRandomList();
+	write(list,cells);
 }
-function createBorders(){
+function createCells(){
 	for(let i=0;i<9;i++){
-		cells[i][0]=new cell(i*unitLength,0,unitLength);
+		for(let j=0;j<9;j++){
+			cells[i][j]=new cell(i*unitLength,j*unitLength,unitLength);
+		}
 	}
 }
 function smaller(a,b){
 	return a<b?a:b;
+}
+
+function make2DArray(row,col){
+	let arr=new Array(row);
+	for(let i=0;i<row;i++){
+		arr[i]=new Array(col);
+	}
+	return arr;
+}
+
+function randomise(number){//returns randomly number from 0 to (number-1) inclusive
+	return Math.floor((Math.random() * number));
+}
+function shuffle(arr){
+	let randomArr=copyArr(arr);
+	let length=arr.length;
+	for(let i=0;i<length;i++){
+		target=randomise(length);
+		temp=randomArr[i];
+		randomArr[i]=randomArr[target];
+		randomArr[target]=temp;
+	}
+	return randomArr;
+}
+function copyArr(Arr){
+	let copy=new Array(Arr.length);
+	for(let i=0;i<Arr.length;i++){
+		copy[i]=Arr[i];
+	}
+	return copy;
+}
+
+function write(list,cells){
+	for(let i=0;i<9;i++){
+		for(let j=0;j<9;j++){
+			cells[i][j].write(list[i][j]);
+		}
+	}
+}
+function seeList(list){
+	for(let i=0;i<9;i++){
+		for(let j=0;j<9;j++){
+			console.log(list[i][j]+" ");
+		}
+		console.log("\n")
+	}
+}
+
+function makeRandomList(){
+	let list=new Array(9);
+	let numbers=new Array(9);
+	for(let i=0;i<9;i++){
+		numbers[i]=i+1;
+	}
+	//list[0]=shuffle(numbers);
+	//let temp=list[0];
+	for(let i=0;i<9;i++){
+		list[i]=shuffle(numbers);
+		//temp=list[i];
+		//console.log(list[i]);
+	}
+	return list;
 }
 function background(r,g,b){
 	context.fillStyle= "rgb(" +r+ "," +g+ "," +b+")";
 	context.fillRect(0,0,canvas.width,canvas.height);
 }
 function setBorders(){
-	context.lineWidth=6;
+	context.lineWidth=8;
 	context.fillStyle= "black";
 	context.rect(0,0,canvas.width,canvas.height);
-	//context.lineWidth=6;
 	context.stroke();
-	
-	//drawLine(canvas.width/2,0,canvas.width/2,canvas.height);
+	drawLine(0,3*unitLength,9*unitLength,3*unitLength,);
+	drawLine(0,6*unitLength,9*unitLength,6*unitLength,);
+	drawLine(3*unitLength,0,3*unitLength,9*unitLength,);
+	drawLine(6*unitLength,0,6*unitLength,9*unitLength,);
 }
 
 function drawLine(x1,y1,x2,y2){
