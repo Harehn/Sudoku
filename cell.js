@@ -2,6 +2,8 @@ class cell{
 	constructor(x,y,length,number){
 		this.x=x;
 		this.y=y;
+		this.i=x/length;
+		this.j=y/length;
 		this.length=length;
 		this.show();
 		number?this.number=number:{};

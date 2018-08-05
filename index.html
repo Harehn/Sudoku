@@ -18,14 +18,14 @@
 let canvas;
 let context;
 let list;
+let groups;
+//let columns
 canvas=document.getElementById("platformCanvas");
 context=canvas.getContext("2d");
-let cells=make2DArray(9,9);
+let cells;
 let unitLength=Math.floor(smaller(canvas.width,canvas.height)/9);
 
 window.onload=function() {
-	//canvas=document.getElementById("platformCanvas");
-    //context=canvas.getContext("2d");
 	setup();
     //document.addEventListener("keydown",keyPush);
     //setInterval(game,1000/15);
@@ -33,17 +33,37 @@ window.onload=function() {
 function setup(){
 	background(255,255,255);
 	setBorders();
-	createCells();
+	cells=createCells();
 	list=makeRandomList();
-	write(list,cells);
+	groups=write(list,cells);
 }
 function createCells(){
+	let newCells=make2DArray(9,9);
 	for(let i=0;i<9;i++){
 		for(let j=0;j<9;j++){
-			cells[i][j]=new cell(i*unitLength,j*unitLength,unitLength);
+			newCells[i][j]=new cell(i*unitLength,j*unitLength,unitLength);
 		}
 	}
+	return newCells;
 }
+function makeGroup(x1,y1,x2,y2,allCells){
+	let cells=new Array(9);
+	let k=0;
+	for(let i=x1;i<x2+1;i++){
+		for(let j=y1;j<y2+1;j++){
+			cells[k]= allCells[i] [j];
+			k++;
+		}
+	}
+	return cells;
+}
+
+function writeToGroup(list,group){
+	for(let i=0;i<list.length;i++){
+		group[i].write(list[i]);
+	}
+}
+
 function smaller(a,b){
 	return a<b?a:b;
 }
@@ -77,35 +97,26 @@ function copyArr(Arr){
 	}
 	return copy;
 }
-
 function write(list,cells){
-	for(let i=0;i<9;i++){
-		for(let j=0;j<9;j++){
-			cells[i][j].write(list[i][j]);
-		}
+	let points=[0,0,2,2,  3,0,5,2,  6,0,8,2,  0,3,2,5,  3,3,5,5,  6,3,8,5,  0,6,2,8,  3,6,5,8,  6,6,8,8];
+	let k=0;
+	let groups=new Array(9);
+	for(let i=0;i<36;i+=4){
+		groups[k]=makeGroup(points[i],points[i+1],points[i+2],points[i+3],cells);
+		console.log(k+" "+i+" "+points[i]+" "+points[i+1]+" "+points[i+2]+" "+points[i+3])
+		writeToGroup(list[k],groups[k]);
+		k++;
 	}
+	return groups;
 }
-function seeList(list){
-	for(let i=0;i<9;i++){
-		for(let j=0;j<9;j++){
-			console.log(list[i][j]+" ");
-		}
-		console.log("\n")
-	}
-}
-
 function makeRandomList(){
 	let list=new Array(9);
 	let numbers=new Array(9);
 	for(let i=0;i<9;i++){
 		numbers[i]=i+1;
 	}
-	//list[0]=shuffle(numbers);
-	//let temp=list[0];
 	for(let i=0;i<9;i++){
 		list[i]=shuffle(numbers);
-		//temp=list[i];
-		//console.log(list[i]);
 	}
 	return list;
 }
