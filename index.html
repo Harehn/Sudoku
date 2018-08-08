@@ -18,10 +18,11 @@ let canvas;
 let context;
 let list;
 let groups;
-//let columns
+let cells;
+let columns;
+let rows;
 canvas=document.getElementById("platformCanvas");
 context=canvas.getContext("2d");
-let cells;
 let unitLength=Math.floor(smaller(canvas.width,canvas.height)/9);
 
 window.onload=function() {
@@ -50,13 +51,7 @@ function smaller(a,b){
 	return a<b?a:b;
 }
 
-function make2DArray(row,col){
-	let arr=new Array(row);
-	for(let i=0;i<row;i++){
-		arr[i]=new Array(col);
-	}
-	return arr;
-}
+
 function copyArr(Arr){
 	let copy=new Array(Arr.length);
 	for(let i=0;i<Arr.length;i++){
@@ -76,6 +71,7 @@ function write(list,cells){
 	}
 	return groups;
 }
+
 function background(r,g,b){
 	context.fillStyle= "rgb(" +r+ "," +g+ "," +b+")";
 	context.fillRect(0,0,canvas.width,canvas.height);
