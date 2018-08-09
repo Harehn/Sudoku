@@ -1,4 +1,3 @@
-
 function make2DArray(row,col){
 	let arr=new Array(row);
 	for(let i=0;i<row;i++){
@@ -33,4 +32,11 @@ function writeToGroup(list,group){
 	for(let i=0;i<list.length;i++){
 		group[i].write(list[i]);
 	}
+}
+function makeBooleanList(size){
+	let list=new Array(size);
+	for(let i=0;i<list.length;i++){
+		list[i]=false;
+	}
+	return list;
 }

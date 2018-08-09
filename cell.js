@@ -23,7 +23,6 @@ class cell{
 		context.stroke();
 		if(this.number){
 			this.write(this.number);
-			console.log(this.i,this.j);
 		}
 	}
 	write(num){

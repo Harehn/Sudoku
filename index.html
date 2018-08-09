@@ -36,6 +36,7 @@ function setup(){
 	cells=createCells();
 	list=makeRandomList();
 	groups=write(list,cells);
+	traverse(cells);
 }
 
 function createCells(){
@@ -46,6 +47,31 @@ function createCells(){
 		}
 	}
 	return newCells;
+}
+function traverse(array2D){
+	let transpose=transpose2DArray(9,9,array2D);
+	for(let i=0;i<array2D.length;i++){
+		traverseArray(array2D[i]);
+		traverseArray(transpose[i]);
+	}
+}
+function traverseArray(array){
+	let solvedList=makeBooleanList(9);
+	for(let i=0;i<array.length;i++){
+		let currCell=array[i];
+		let currNum=currCell.number;
+		if(solvedList[currNum-1]){
+			currCell.highlighted=true;
+			currCell.sorted=true;
+			currCell.show();
+		}else{
+			solvedList[currNum-1]=true;
+			currCell.sorted=true;
+			//currCell.highlighted=true;
+		}
+		console.log(currNum);
+		console.log(solvedList);
+	}
 }
 function smaller(a,b){
 	return a<b?a:b;
